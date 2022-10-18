@@ -1,3 +1,9 @@
+.header__wrapper h1{
+    color: #DD5353;
+    letter-spacing: .1rem;
+    text-transform: uppercase;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
 .header__wrapper{
     height: 3rem;
     width: 100vw;

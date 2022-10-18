@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import Recipe from "../recipe/Recipe";
 
 const style = {
   boxStyles: {
@@ -33,6 +34,11 @@ const style = {
     height: "10rem",
     marginLeft: "1rem",
   },
+  actionStyles: {
+    display: 'flex',
+    justifyContent: 'space-evenly',
+    marginTop: '1rem'
+  }
 };
 const AddRecipe = () => {
   const [newRecipe, setNewRecipe] = useState({
@@ -41,6 +47,44 @@ const AddRecipe = () => {
     description: "",
     imageUrl: "",
   });
+
+  const [ingredient, setIngredient] = useState({
+    name: "",
+    quantity: "",
+  });
+
+  const handleNewRecipeOnChange = (e) => {
+    setNewRecipe({
+      ...newRecipe,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleIngredientOnChange = (e) => {
+    setIngredient({
+      ...ingredient,
+      [e.target.name]: e.target.value,
+    });
+  };
+  const handleAddIngredient = () => {
+    if (ingredient.name === "" || ingredient.quantity === "") {
+      alert("No Ingredient added...");
+      return;
+    }
+
+    setNewRecipe({
+      ...newRecipe,
+      ingredients: [...newRecipe.ingredients, ingredient],
+    });
+
+    setIngredient({
+      name: "",
+      quantity: "",
+    });
+  };
+
+  const handleRemoveIngredient = () => {};
+
   return (
     <div>
       <Box sx={{ ...style.boxStyles, width: 500 }}>
@@ -55,6 +99,7 @@ const AddRecipe = () => {
           <TextField
             name="name"
             value={newRecipe.name}
+            onChange={handleNewRecipeOnChange}
             label="Recipe Name"
             variant="outlined"
             fullWidth
@@ -64,6 +109,7 @@ const AddRecipe = () => {
           <TextField
             name="description"
             value={newRecipe.description}
+            onChange={handleNewRecipeOnChange}
             label="Recipe Description"
             variant="outlined"
             fullWidth
@@ -75,7 +121,8 @@ const AddRecipe = () => {
             <Typography variant="h6">Add Ingredient</Typography>
             <TextField
               name="name"
-              // value={newRecipe.description}
+              value={ingredient.name}
+              onChange={handleIngredientOnChange}
               label="name"
               variant="outlined"
               // fullWidth
@@ -87,24 +134,35 @@ const AddRecipe = () => {
             />
             <TextField
               name="quantity"
-              // value={newRecipe.description}
+              value={ingredient.quantity}
+              onChange={handleIngredientOnChange}
               label="Qty"
               variant="outlined"
-              type='number'
+              type="text"
               // fullWidth
               sx={{ ...style.textfieldStyles, width: "5rem" }}
             />
-            <IconButton>
+            <IconButton onClick={handleAddIngredient}>
               <AddCircleOutlineIcon fontSize="large" />
             </IconButton>
           </div>
+          <div>
+            {newRecipe.ingredients.at.apply.length > 0 && (
+              <ul>
+                {newRecipe.ingredients.map((i, k) => (
+                  <li key={k}>
+                    {i.name} ------ {i.quantity}{" "}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
 
-          <div 
-            style={{display:'flex', alignItems:'center'}}
-          >
+          <div style={{ display: "flex", alignItems: "center" }}>
             <TextField
               name="imageUrl"
               value={newRecipe.imageUrl}
+              onChange={handleNewRecipeOnChange}
               label="Recipe Image Link"
               variant="outlined"
               // fullWidth
@@ -117,6 +175,37 @@ const AddRecipe = () => {
               src="https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc="
               alt="recipe-image-preview"
             />
+          </div>
+          <div style={style.actionStyles}>
+            <Button
+              variant="contained"
+              size="medium"
+              sx={{
+                backgroundColor: " #F991CC",
+                "&:hover": {
+                  backgroundColor: "#E2AFDE",
+                  color: " #fff",
+                },
+              }}
+            >
+              {" "}
+              Cancel
+            </Button>
+
+            <Button
+              variant="contained"
+              size="medium"
+              sx={{
+                backgroundColor: " #98A8F8",
+                "&:hover": {
+                  backgroundColor: "#BCCEF8",
+                  color: " #FAF7F0",
+                },
+              }}
+            >
+              {" "}
+              Add
+            </Button>
           </div>
         </form>
       </Box>
