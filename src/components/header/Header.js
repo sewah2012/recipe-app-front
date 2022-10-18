@@ -6,6 +6,14 @@ import { Button, Modal } from "@mui/material";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
+
+  const handleModalOpen =()=>{
+        setOpen(true);
+  }
+
+  const handleModalClose =()=>{
+    setOpen(false);
+  }
   return (
     <div className="header__wrapper">
       <h1>Recipe - App</h1>
@@ -14,9 +22,7 @@ const Header = () => {
         </div> */}
       <Button
         variant="contained"
-        onClick={() => {
-          setOpen(true);
-        }}
+        onClick={handleModalOpen}
         size="medium"
       >
         Add Recipe
@@ -24,13 +30,11 @@ const Header = () => {
 
       <Modal
         open={open}
-        onClose={() => {
-          setOpen(false);
-        }}
+        onClose={handleModalClose}
         aria-labelledby="parent-modal-title"
         aria-describedby="parent-modal-description"
       >
-        <AddRecipe />
+        <AddRecipe handleModalClose = {handleModalClose} />
       </Modal>
     </div>
   );

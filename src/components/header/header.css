@@ -23,9 +23,7 @@
     justify-content: center;
     /* text-align: center; */
 }
-.header__button > h3{
-    /* disp */
-}
+
 .header__button:hover{
     background-color: #D3D2C7;
     cursor: pointer;

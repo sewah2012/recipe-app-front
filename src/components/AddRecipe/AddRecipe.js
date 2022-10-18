@@ -1,16 +1,14 @@
 import React, { useState } from "react";
 import {
-  Backdrop,
   Box,
   Button,
   IconButton,
-  Modal,
   TextField,
   Typography,
 } from "@mui/material";
 
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import Recipe from "../recipe/Recipe";
+import CancelPresentationIcon from '@mui/icons-material/CancelPresentation';
 
 const style = {
   boxStyles: {
@@ -40,7 +38,7 @@ const style = {
     marginTop: '1rem'
   }
 };
-const AddRecipe = () => {
+const AddRecipe = ({handleModalClose}) => {
   const [newRecipe, setNewRecipe] = useState({
     name: "",
     ingredients: [],
@@ -83,7 +81,34 @@ const AddRecipe = () => {
     });
   };
 
-  const handleRemoveIngredient = () => {};
+  const handleRemoveIngredient = (i) => {
+    setNewRecipe({
+        ...newRecipe,
+        ingredients: newRecipe.ingredients.filter((item)=>newRecipe.ingredients.indexOf(item)!==i)
+        
+
+    })
+  };
+
+  const handleReset = ()=>{
+    setIngredient({
+        name: "",
+        quantity: "",
+      });
+
+      setNewRecipe({
+        name: "",
+        ingredients: [],
+        description: "",
+        imageUrl: "",
+      });
+  }
+
+  const handleAddRecipe = ()=>{
+    // alert("add button clicked")
+    handleReset();
+    handleModalClose();
+  }
 
   return (
     <div>
@@ -152,6 +177,9 @@ const AddRecipe = () => {
                 {newRecipe.ingredients.map((i, k) => (
                   <li key={k}>
                     {i.name} ------ {i.quantity}{" "}
+                    <IconButton onClick={()=>{handleRemoveIngredient(k)}}>
+                        <CancelPresentationIcon fontSize="medium" />
+                    </IconButton>
                   </li>
                 ))}
               </ul>
@@ -172,12 +200,13 @@ const AddRecipe = () => {
 
             <img
               style={style.previewImageStyle}
-              src="https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc="
+              src={newRecipe.imageUrl !=="" ? newRecipe.imageUrl : "https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc="}
               alt="recipe-image-preview"
             />
           </div>
           <div style={style.actionStyles}>
             <Button
+                onClick={handleReset}
               variant="contained"
               size="medium"
               sx={{
@@ -187,9 +216,10 @@ const AddRecipe = () => {
                   color: " #fff",
                 },
               }}
+              
             >
               {" "}
-              Cancel
+              Reset Form
             </Button>
 
             <Button
@@ -202,6 +232,7 @@ const AddRecipe = () => {
                   color: " #FAF7F0",
                 },
               }}
+              onClick = {handleAddRecipe}
             >
               {" "}
               Add
