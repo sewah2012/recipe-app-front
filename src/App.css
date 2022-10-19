@@ -1,20 +1,19 @@
 .App{
-   background-color: antiquewhite;
    width: fit-content;
+   display: flex;
+   flex-direction: column;
  
 }
-
-.app__main--section{
-    display: flex;
-    justify-content:  flex-start;
-}
-
 .app__recipe--list{
     flex: 1;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-evenly;
+    justify-content:center;
     padding: .5rem;
-    /* height: 80; */
+    height: inherit;
+}
+
+.app__middle{
+    flex: 1;
 }
 

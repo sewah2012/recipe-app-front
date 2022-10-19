@@ -1,120 +1,148 @@
-import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  IconButton,
-  TextField,
-  Typography,
-} from "@mui/material";
+import React, { useState } from 'react'
+import { Box, Button, IconButton, TextField, Typography } from '@mui/material'
 
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import CancelPresentationIcon from '@mui/icons-material/CancelPresentation';
-
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
+import CancelPresentationIcon from '@mui/icons-material/CancelPresentation'
+import axios from 'axios'
+import { useMutation, useQueryClient } from 'react-query'
 const style = {
   boxStyles: {
-    position: "absolute",
-    top: "30%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: "20rem",
-    bgcolor: "background.paper",
-    border: ".3rem solid #E2AFDE",
+    position: 'absolute',
+    top: '20%',
+    left: '50%',
+    transform: 'translate(-50%, -20%)',
+    width: '20rem',
+    bgcolor: 'background.paper',
+    border: '.3rem solid #E2AFDE',
     boxShadow: 24,
     pt: 2,
     px: 4,
     pb: 3,
   },
   textfieldStyles: {
-    marginBottom: ".5rem",
+    marginBottom: '.5rem',
   },
   previewImageStyle: {
-    width: "10rem",
-    height: "10rem",
-    marginLeft: "1rem",
+    width: '10rem',
+    height: '10rem',
+    marginLeft: '1rem',
   },
   actionStyles: {
     display: 'flex',
     justifyContent: 'space-evenly',
-    marginTop: '1rem'
-  }
-};
-const AddRecipe = ({handleModalClose}) => {
+    marginTop: '1rem',
+  },
+}
+const AddRecipe = ({ handleModalClose }) => {
   const [newRecipe, setNewRecipe] = useState({
-    name: "",
+    name: '',
     ingredients: [],
-    description: "",
-    imageUrl: "",
-  });
+    description: '',
+    imageUrl: '',
+  })
 
   const [ingredient, setIngredient] = useState({
-    name: "",
-    quantity: "",
-  });
+    name: '',
+    quantity: '',
+  })
 
   const handleNewRecipeOnChange = (e) => {
     setNewRecipe({
       ...newRecipe,
       [e.target.name]: e.target.value,
-    });
-  };
+    })
+  }
 
   const handleIngredientOnChange = (e) => {
     setIngredient({
       ...ingredient,
       [e.target.name]: e.target.value,
-    });
-  };
+    })
+  }
   const handleAddIngredient = () => {
-    if (ingredient.name === "" || ingredient.quantity === "") {
-      alert("No Ingredient added...");
-      return;
+    if (ingredient.name === '' || ingredient.quantity === '') {
+      alert('No Ingredient added...')
+      return
     }
 
     setNewRecipe({
       ...newRecipe,
       ingredients: [...newRecipe.ingredients, ingredient],
-    });
+    })
 
     setIngredient({
-      name: "",
-      quantity: "",
-    });
-  };
+      name: '',
+      quantity: '',
+    })
+  }
 
   const handleRemoveIngredient = (i) => {
     setNewRecipe({
-        ...newRecipe,
-        ingredients: newRecipe.ingredients.filter((item)=>newRecipe.ingredients.indexOf(item)!==i)
-        
-
+      ...newRecipe,
+      ingredients: newRecipe.ingredients.filter(
+        (item) => newRecipe.ingredients.indexOf(item) !== i,
+      ),
     })
-  };
-
-  const handleReset = ()=>{
-    setIngredient({
-        name: "",
-        quantity: "",
-      });
-
-      setNewRecipe({
-        name: "",
-        ingredients: [],
-        description: "",
-        imageUrl: "",
-      });
   }
 
-  const handleAddRecipe = ()=>{
-    // alert("add button clicked")
-    handleReset();
-    handleModalClose();
+  const handleReset = () => {
+    setIngredient({
+      name: '',
+      quantity: '',
+    })
+
+    setNewRecipe({
+      name: '',
+      ingredients: [],
+      description: '',
+      imageUrl: '',
+    })
+  }
+
+  const queryClient = useQueryClient()
+
+  const postRecipe = async (dto) => {
+    const { data } = await axios.post('/recipe/create', dto)
+    return data
+  }
+
+  const { mutate, isLoading, isError } = useMutation(postRecipe, {
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(['recipes'])
+      handleReset()
+      handleModalClose()
+      // console.log(data)
+    },
+  })
+
+  const handleAddRecipe = () => {
+    if (newRecipe.name === '') {
+      alert('Recipe Name missing.')
+      return
+    }
+
+    if (newRecipe.description === '') {
+      alert('Recipe Name missing.')
+      return
+    }
+
+    if (newRecipe.imageUrl === '') {
+      alert('Recipe Name missing.')
+      return
+    }
+
+    if (newRecipe.ingredients === []) {
+      alert('Recipe Name missing.')
+      return
+    }
+    mutate(newRecipe)
   }
 
   return (
     <div>
       <Box sx={{ ...style.boxStyles, width: 500 }}>
         <Typography
-          sx={{ padding: ".5rem" }}
+          sx={{ padding: '.5rem' }}
           variant="h4"
           id="parent-modal-title"
         >
@@ -153,8 +181,8 @@ const AddRecipe = ({handleModalClose}) => {
               // fullWidth
               sx={{
                 ...style.textfieldStyles,
-                width: "7rem",
-                marginRight: ".5rem",
+                width: '7rem',
+                marginRight: '.5rem',
               }}
             />
             <TextField
@@ -165,7 +193,7 @@ const AddRecipe = ({handleModalClose}) => {
               variant="outlined"
               type="text"
               // fullWidth
-              sx={{ ...style.textfieldStyles, width: "5rem" }}
+              sx={{ ...style.textfieldStyles, width: '5rem' }}
             />
             <IconButton onClick={handleAddIngredient}>
               <AddCircleOutlineIcon fontSize="large" />
@@ -176,9 +204,13 @@ const AddRecipe = ({handleModalClose}) => {
               <ul>
                 {newRecipe.ingredients.map((i, k) => (
                   <li key={k}>
-                    {i.name} ------ {i.quantity}{" "}
-                    <IconButton onClick={()=>{handleRemoveIngredient(k)}}>
-                        <CancelPresentationIcon fontSize="medium" />
+                    {i.name} ------ {i.quantity}{' '}
+                    <IconButton
+                      onClick={() => {
+                        handleRemoveIngredient(k)
+                      }}
+                    >
+                      <CancelPresentationIcon fontSize="medium" />
                     </IconButton>
                   </li>
                 ))}
@@ -186,7 +218,7 @@ const AddRecipe = ({handleModalClose}) => {
             )}
           </div>
 
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
             <TextField
               name="imageUrl"
               value={newRecipe.imageUrl}
@@ -200,25 +232,28 @@ const AddRecipe = ({handleModalClose}) => {
 
             <img
               style={style.previewImageStyle}
-              src={newRecipe.imageUrl !=="" ? newRecipe.imageUrl : "https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc="}
+              src={
+                newRecipe.imageUrl !== ''
+                  ? newRecipe.imageUrl
+                  : 'https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc='
+              }
               alt="recipe-image-preview"
             />
           </div>
           <div style={style.actionStyles}>
             <Button
-                onClick={handleReset}
+              onClick={handleReset}
               variant="contained"
               size="medium"
               sx={{
-                backgroundColor: " #F991CC",
-                "&:hover": {
-                  backgroundColor: "#E2AFDE",
-                  color: " #fff",
+                backgroundColor: ' #F991CC',
+                '&:hover': {
+                  backgroundColor: '#E2AFDE',
+                  color: ' #fff',
                 },
               }}
-              
             >
-              {" "}
+              {' '}
               Reset Form
             </Button>
 
@@ -226,22 +261,23 @@ const AddRecipe = ({handleModalClose}) => {
               variant="contained"
               size="medium"
               sx={{
-                backgroundColor: " #98A8F8",
-                "&:hover": {
-                  backgroundColor: "#BCCEF8",
-                  color: " #FAF7F0",
+                backgroundColor: ' #98A8F8',
+                '&:hover': {
+                  backgroundColor: '#BCCEF8',
+                  color: ' #FAF7F0',
                 },
               }}
-              onClick = {handleAddRecipe}
+              onClick={handleAddRecipe}
+              disabled={isLoading}
             >
-              {" "}
+              {' '}
               Add
             </Button>
           </div>
         </form>
       </Box>
     </div>
-  );
-};
+  )
+}
 
-export default AddRecipe;
+export default AddRecipe

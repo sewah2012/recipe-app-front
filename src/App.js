@@ -1,57 +1,41 @@
-import React, { Component } from 'react';
-import './App.css';
-import Footer from './components/footer/Footer';
-import Header from './components/header/Header';
-import Recipe from './components/recipe/Recipe';
+import React, { Component, useEffect, useState } from 'react'
+import './App.css'
+import Footer from './components/footer/Footer'
+import Header from './components/header/Header'
+import Recipe from './components/recipe/Recipe'
+import axios from 'axios'
+import { useQuery, useQueryClient } from 'react-query'
+import { LinearProgress } from '@mui/material'
+axios.defaults.baseURL = 'http://localhost:8181/api'
 
-const data = [
-  {
-      "id": 1,
-      "name": "Recipe 1",
-      "ingredients": [
-          {
-              "id": 1,
-              "name": "Tomatoes",
-              "quantity": "10",
-              "recipe": null
-          },
-          {
-              "id": 2,
-              "name": "Butter",
-              "quantity": "1",
-              "recipe": null
-          },
-          {
-              "id": 3,
-              "name": "Flour",
-              "quantity": "5",
-              "recipe": null
-          }
-      ],
-      "imageUrl": "https://media.istockphoto.com/photos/pumpkins-nuts-indian-corn-and-apples-picture-id492068942?s=612x612",
-      "description": "This is a test recipe"
+const App = () => {
+  const getRecipes = async () => {
+    const response = await axios.get('/recipe/getAll')
+    return response.data
   }
-]
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-         <Header />
-         <div className='app__recipe--list'>
-            {
-              data.map((r,i)=>(
-                <Recipe
-                key={r.id}
-                  recipe={r}
-                />
-              ))
-            }
-         </div>
-      
-        <Footer />
+  //query
+  const { data, isLoading, isError } = useQuery('recipes', getRecipes, {
+    refetchOnWindowFocus: false,
+  })
+
+  return (
+    <div className="App">
+      <Header />
+      <div className="app__middle">
+        {isLoading ? (
+          <LinearProgress />
+        ) : (
+          <div className="app__recipe--list">
+            {data.map((r, i) => (
+              <Recipe key={r.id} recipe={r} />
+            ))}
+          </div>
+        )}
       </div>
-    );
-  }
+
+      <Footer />
+    </div>
+  )
 }
 
-export default App;
+export default App
