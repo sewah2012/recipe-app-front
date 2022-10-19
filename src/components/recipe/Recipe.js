@@ -1,11 +1,30 @@
 import './recipe.css'
-import React from 'react'
+import React, { useState } from 'react'
 import ActionButton from '../button/ActionButton'
 import { useMutation, useQueryClient } from 'react-query'
 import axios from 'axios'
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Modal,
+} from '@mui/material'
+import UpdateRecipe from '../UpdateRecipe/UpdateRecipe'
 
 const Recipe = ({ recipe }) => {
-  const handleEdit = () => {}
+  const [open, setOpen] = useState(false)
+  const [openModal, setOpenModal] = useState(false)
+
+  const handleModalClose = () => {
+    setOpenModal(false)
+  }
+
+  const handleEdit = () => {
+    setOpenModal(true)
+  }
 
   const queryClient = useQueryClient()
 
@@ -22,7 +41,16 @@ const Recipe = ({ recipe }) => {
   })
 
   const handleDelete = () => {
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
+  const handleConfirm = () => {
     mutate()
+    setOpen(false)
   }
 
   return (
@@ -68,6 +96,39 @@ const Recipe = ({ recipe }) => {
           />
         </div>
       </div>
+
+      <div>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{'Delete Recipe'}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Are you sure you want to delete this recipe. Note: This action is
+              irreversible.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>No, Cancel</Button>
+            <Button onClick={handleConfirm} autoFocus>
+              Yes, Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+
+      <Modal
+        // sx={{ position: 'relative' }}
+        open={openModal}
+        onClose={handleModalClose}
+        aria-labelledby="parent-modal-title"
+        aria-describedby="parent-modal-description"
+      >
+        <UpdateRecipe recipe={recipe} handleModalClose={handleModalClose} />
+      </Modal>
     </div>
   )
 }
