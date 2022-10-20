@@ -1,9 +1,8 @@
 .App{
-    display: grid;
-    height: 100%;
-    /* let content auto to occupy remaining height and pass value in fit-content with min-height for header and footer */
-    grid-template-rows: fit-content auto 1.5rem;
-    grid-template-areas:"header" "main" "footer";
+    display: flex;
+    min-height: 50rem;
+    flex-direction: column;
+    align-items: stretch;
 }
 .app__recipe--list{
     display: flex;
@@ -13,16 +12,13 @@
 }
 
 .app__header{
-    /* height: fit-content; */
-    grid-area: header;
+    height: fit-content;
 }
 
 .app__middle{
+    flex: 1;
     grid-area: main;
 }
 .app__footer{
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    grid-area: footer;
+    flex: 0;
 }
