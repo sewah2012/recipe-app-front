@@ -1,19 +1,28 @@
 .App{
-   width: fit-content;
-   display: flex;
-   flex-direction: column;
- 
+    display: grid;
+    height: 100%;
+    /* let content auto to occupy remaining height and pass value in fit-content with min-height for header and footer */
+    grid-template-rows: fit-content auto 1.5rem;
+    grid-template-areas:"header" "main" "footer";
 }
 .app__recipe--list{
-    flex: 1;
     display: flex;
     flex-wrap: wrap;
-    justify-content:center;
+    justify-content: center;
     padding: .5rem;
-    height: inherit;
+}
+
+.app__header{
+    /* height: fit-content; */
+    grid-area: header;
 }
 
 .app__middle{
-    flex: 1;
+    grid-area: main;
 }
-
+.app__footer{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    grid-area: footer;
+}

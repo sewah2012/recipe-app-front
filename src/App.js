@@ -20,7 +20,9 @@ const App = () => {
 
   return (
     <div className="App">
-      <Header />
+      <div className="app__header">
+        <Header />
+      </div>
       <div className="app__middle">
         {isLoading ? (
           <LinearProgress />
@@ -33,7 +35,9 @@ const App = () => {
         )}
       </div>
 
-      <Footer />
+      <div className="app__footer">
+        <Footer />
+      </div>
     </div>
   )
 }

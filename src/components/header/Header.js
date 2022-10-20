@@ -19,12 +19,19 @@ const Header = () => {
       {/* <div className='header__button'>
         <h3>Add Recipe </h3>
         </div> */}
-      <Button variant="contained" onClick={handleModalOpen} size="medium">
+      <Button
+        sx={{
+          backgroundColor: '#DD5353',
+          '&:hover': { backgroundColor: '#DD5353' },
+        }}
+        variant="contained"
+        onClick={handleModalOpen}
+        size="medium"
+      >
         Add Recipe
       </Button>
 
       <Modal
-        // sx={{ position: 'relative' }}
         open={open}
         onClose={handleModalClose}
         aria-labelledby="parent-modal-title"

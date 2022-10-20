@@ -2,14 +2,13 @@
     color: #DD5353;
     letter-spacing: .1rem;
     text-transform: uppercase;
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 .header__wrapper{
-    height: 3rem;
-    width: 100vw;
+    height: inherit;
+    width: inherit;
     background-color: #E2AFDE;
     padding: 1rem;
     display: flex;
     justify-content: space-around;
-    position: relative;
+    margin-bottom: 1rem;
 }
