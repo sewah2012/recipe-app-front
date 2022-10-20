@@ -28,9 +28,20 @@ const App = () => {
           <LinearProgress />
         ) : (
           <div className="app__recipe--list">
-            {data.map((r, i) => (
-              <Recipe key={r.id} recipe={r} />
-            ))}
+            {data.length === 0 ? (
+              <img
+                style={{
+                  height: '100%',
+                  width: '40%',
+                  opacity: '.5',
+                  objectFit: 'contain',
+                }}
+                src="assets/no-data.png"
+                alt="No Recipe available"
+              />
+            ) : (
+              data.map((r, i) => <Recipe key={r.id} recipe={r} />)
+            )}
           </div>
         )}
       </div>
