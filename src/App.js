@@ -6,8 +6,8 @@ import Recipe from './components/recipe/Recipe'
 import axios from 'axios'
 import { useQuery, useQueryClient } from 'react-query'
 import { LinearProgress } from '@mui/material'
-// axios.defaults.baseURL = 'http://localhost:8181/api'
-axios.defaults.baseURL = 'https://desolate-retreat-02694.herokuapp.com/api'
+axios.defaults.baseURL = 'http://localhost:8181/api'
+// axios.defaults.baseURL = 'https://desolate-retreat-02694.herokuapp.com/api'
 
 const App = () => {
   const getRecipes = async () => {

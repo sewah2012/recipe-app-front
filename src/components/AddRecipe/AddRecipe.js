@@ -163,7 +163,7 @@ const AddRecipe = ({ handleModalClose }) => {
             name="description"
             value={newRecipe.description}
             onChange={handleNewRecipeOnChange}
-            label="Recipe Description"
+            label="Recipe Instructions"
             variant="outlined"
             fullWidth
             multiline
